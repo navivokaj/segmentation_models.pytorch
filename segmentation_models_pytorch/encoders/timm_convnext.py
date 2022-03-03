@@ -57,7 +57,7 @@ for model_name, sources in convnext_weights.items():
 
 timm_convnext_encoders = {
     "timm-convnext_tiny": {
-        "encoder": 
+        "encoder": ConvNeXtEncoder,
         "pretrained_settings": pretrained_settings["convnext_tiny"],
         "params": {
            "depths": (3, 3, 9, 3),
