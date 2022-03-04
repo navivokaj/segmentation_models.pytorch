@@ -60,8 +60,9 @@ timm_convnext_encoders = {
         "encoder": ConvNeXtEncoder,
         "pretrained_settings": pretrained_settings["convnext_tiny"],
         "params": {
+            "out_channels": (3, 96, 96, 192, 384, 768), 
            "depths": (3, 3, 9, 3),
-           "dims": (96, 192, 384, 768),   
+           "dims": (96, 192, 384, 768),  
         }
     }
 }
