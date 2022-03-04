@@ -80,7 +80,12 @@ def get_encoder(name, in_channels=3, depth=5, weights=None, output_stride=32, **
                     list(encoders[name]["pretrained_settings"].keys()),
                 )
             )
-        encoder.load_state_dict(model_zoo.load_url(settings["url"]))
+        if name=="timm-convnext_tiny":
+            state_dict = model_zoo.load_url(settings["url"])
+            state_dict = checkpoint_filter_fn(state_dict, encoder)
+            encoder.load_state_dict(state_dict)
+        else:
+            encoder.load_state_dict(model_zoo.load_url(settings["url"]))
 
     encoder.set_in_channels(in_channels, pretrained=weights is not None)
     if output_stride != 32:
@@ -118,3 +123,24 @@ def get_preprocessing_params(encoder_name, pretrained="imagenet"):
 def get_preprocessing_fn(encoder_name, pretrained="imagenet"):
     params = get_preprocessing_params(encoder_name, pretrained=pretrained)
     return functools.partial(preprocess_input, **params)
+
+def checkpoint_filter_fn(state_dict, model):
+    """ Remap FB checkpoints -> timm """
+    if 'model' in state_dict:
+        state_dict = state_dict['model']
+    out_dict = {}
+    import re
+    for k, v in state_dict.items():
+        k = k.replace('downsample_layers.0.', 'stem.')
+        k = re.sub(r'stages.([0-9]+).([0-9]+)', r'stages.\1.blocks.\2', k)
+        k = re.sub(r'downsample_layers.([0-9]+).([0-9]+)', r'stages.\1.downsample.\2', k)
+        k = k.replace('dwconv', 'conv_dw')
+        k = k.replace('pwconv', 'mlp.fc')
+        k = k.replace('head.', 'head.fc.')
+        if k.startswith('norm.'):
+            k = k.replace('norm', 'head.norm')
+        if v.ndim == 2 and 'head' not in k:
+            model_shape = model.state_dict()[k].shape
+            v = v.reshape(model_shape)
+        out_dict[k] = v
+    return out_dict
