@@ -35,6 +35,8 @@ class ConvNeXtEncoder(ConvNeXt, EncoderMixin):
     def load_state_dict(self, state_dict, **kwargs):
         state_dict.pop("head.fc.bias", None)
         state_dict.pop("head.fc.weight", None)
+        state_dict.pop("head.norm.bias", None)
+        state_dict.pop("head.norm.weight", None)
         super().load_state_dict(state_dict, **kwargs)
 
 convnext_weights = {
