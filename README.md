@@ -20,7 +20,7 @@ The main features of this library are:
 
  - High level API (just two lines to create a neural network)
  - 9 models architectures for binary and multi class segmentation (including legendary Unet)
- - 114 available encoders (and 400+ encoders from [timm](https://github.com/rwightman/pytorch-image-models))
+ - 115 available encoders (and 400+ encoders from [timm](https://github.com/rwightman/pytorch-image-models))
  - All encoders have pre-trained weights for faster and better convergence
  - Popular metrics and losses for training routines
  
@@ -359,6 +359,7 @@ The following is a list of supported encoders in the SMP. Select the appropriate
 |Encoder                         |Weights                         |Params, M                       |
 |--------------------------------|:------------------------------:|:------------------------------:|
 |convnext_tiny                  |imagenet                        |29M                             |
+|convnext_small                 |imagenet                        |50M                             |
 
 </div>
 </details>
