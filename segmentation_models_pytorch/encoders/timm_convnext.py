@@ -43,6 +43,9 @@ convnext_weights = {
     "convnext_tiny": {
         "imagenet": "https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224_ema.pth"
     },
+    "convnext_small": {
+        "imagenet": "https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224_ema.pth"
+    },
 }
 
 pretrained_settings = {}
@@ -63,8 +66,17 @@ timm_convnext_encoders = {
         "pretrained_settings": pretrained_settings["convnext_tiny"],
         "params": {
             "out_channels": (3, 96, 96, 192, 384, 768), 
-           "depths": (3, 3, 9, 3),
-           "dims": (96, 192, 384, 768),  
-        }
-    }
+            "depths": (3, 3, 9, 3),
+            "dims": (96, 192, 384, 768),  
+        },
+    },
+    "timm-convnext_small": {
+        "encoder": ConvNeXtEncoder,
+        "pretrained_settings": pretrained_settings["convnext_small"],
+        "params": {
+            "out_channels": (3, 96, 96, 192, 384, 768), 
+            "depths": (3, 3, 27, 3),
+            "dims": (96, 192, 384, 768),  
+        },
+    },
 }
